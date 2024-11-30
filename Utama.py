@@ -250,9 +250,9 @@ def make_purchase(username):
             continue
         
         selected_products.append({
-            'Nomor' : product_index + 1,
             'name': product[0],
             'quantity': quantity,
+            'price' : int(product[2]),
             'total_price': quantity * int(product[2])
         })
         
@@ -263,7 +263,7 @@ def make_purchase(username):
     while True:
         print("\n=== Daftar Produk yang Anda Pilih ===")
         for i, item in enumerate(selected_products, 1):
-            print(f"{i}. Kode Produk: {item['Nomor']}. {item['name']} - Jumlah: {item['quantity']} - Total Harga: Rp {item['total_price']}")
+            print(f"{i}. {item['name']} - Jumlah: {item['quantity']} - Harga perbiji : {item['price']} - Total Harga: Rp {item['total_price']}")
 
         print("0. Selesai")
         print("88. Tambah produk lagi")
@@ -285,7 +285,7 @@ def make_purchase(username):
                         print(f"Jumlah yang ingin dihapus melebihi jumlah yang dibeli.")
                     else:
                         selected_products[edit_index]['quantity'] -= remove_qty
-                        selected_products[edit_index]['total_price'] -= remove_qty * int(products[product_index + 1][2])
+                        selected_products[edit_index]['total_price'] -= remove_qty * selected_products[edit_index]['price']
                         print(f"{remove_qty} dari {selected_products[edit_index]['name']} berhasil dihapus.")
                         if selected_products[edit_index]['quantity'] == 0:
                             removed_product = selected_products.pop(edit_index)
