@@ -379,7 +379,7 @@ def penjual_menu(username):
 def main():
     """Program utama"""
     initialize_files()
-
+#############
     while True:
         print("\n=== Selamat Datang di F.O.R STORE ===")
         print("1. Login")
