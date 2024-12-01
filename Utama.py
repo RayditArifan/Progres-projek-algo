@@ -1,6 +1,6 @@
 import csv
 import os
-
+###
 # File paths
 USERS_FILE = 'users.csv'
 PRODUCTS_FILE = 'products.csv'
