@@ -40,6 +40,7 @@ def initialize_files():
             ]
             writer.writerows(products)
 
+
     if not os.path.exists(TRANSACTIONS_FILE):
         with open(TRANSACTIONS_FILE, 'w', newline='') as file:
             writer = csv.writer(file)
