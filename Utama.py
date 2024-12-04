@@ -143,8 +143,11 @@ def edit_product():
         print("Proses edit produk dibatalkan.")
         return
     
-    product_index = int(product_index) - 1
-    
+    try : 
+        product_index = int(product_index) - 1
+    except:
+        print("Input harus berupa angka.")
+        return
     # Memastikan produk yang dipilih valid
     with open(PRODUCTS_FILE, 'r') as file:
         reader = csv.reader(file)
@@ -192,8 +195,11 @@ def delete_product():
         print("Proses penghapusan produk dibatalkan.")
         return
     
-    product_index = int(product_index) - 1
-    
+    try :
+        product_index = int(product_index) - 1
+    except :
+        print("Input harus berupa angka.")
+        return
     # Memastikan produk yang dipilih valid
     with open(PRODUCTS_FILE, 'r') as file:
         reader = csv.reader(file)
