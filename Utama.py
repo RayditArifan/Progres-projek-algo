@@ -221,10 +221,10 @@ def delete_product():
 
 # ========================== Fungsi untuk Pembeli ================================
 
+selected_products = []
 def make_purchase(username):
     """Fungsi untuk pembeli melakukan pembelian produk."""
     print("\n=== Pembelian Produk ===")
-    selected_products = []
     
     while True:
         view_products()
