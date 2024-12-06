@@ -5,7 +5,6 @@ import os
 USERS_FILE = 'users.csv'
 PRODUCTS_FILE = 'products.csv'
 TRANSACTIONS_FILE = 'transactions.csv'
-
 # Voucher data
 VOUCHERS = {
     "akumahasigma": 0.1,  # Diskon 10%
@@ -388,11 +387,20 @@ def main():
     initialize_files()
 
     while True:
-        print("\n=== Selamat Datang di F.O.R STORE ===")
-        print("1. Login")
-        print("2. Register")
-        print("3. Keluar")
         
+        print("███████╗░░░░█████╗░░░░██████╗░    ░██████╗████████╗░█████╗░██████╗░███████╗")
+        print("██╔════╝░░░██╔══██╗░░░██╔══██╗    ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██╔════╝")
+        print("█████╗░░░░░██║░░██║░░░██████╔╝    ╚█████╗░░░░██║░░░██║░░██║██████╔╝█████╗░░")
+        print("██╔══╝░░░░░██║░░██║░░░██╔══██╗    ░╚═══██╗░░░██║░░░██║░░██║██╔══██╗██╔══╝░░")
+        print("██║░░░░░██╗╚█████╔╝██╗██║░░██║    ██████╔╝░░░██║░░░╚█████╔╝██║░░██║███████╗")
+        print("╚═╝░░░░░╚═╝░╚════╝░╚═╝╚═╝░░╚═╝    ╚═════╝░░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚══════╝")
+        print("                                                                           ")
+        print("|||||||||||||||||||||||||||||||||||||||||")
+        print("||   Selamat Datang di F.O.R STORE     ||")
+        print("||           1. Login                  ||")
+        print("||           2. Register               ||")
+        print("||           3. Keluar                 ||")
+        print("|||||||||||||||||||||||||||||||||||||||||")
         choice = input("Pilih menu (1-3): ")
         
         if choice == '1':
