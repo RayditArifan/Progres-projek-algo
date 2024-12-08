@@ -226,13 +226,11 @@ def delete_product():
 
 # ========================== Fungsi untuk Pembeli ================================
 
-
-def make_purchase(username, selected_products=None):
+def make_purchase(username):
     """Fungsi untuk pembeli melakukan pembelian produk."""
-    if selected_products is None:
-        selected_products = []  # Initialize if not provided
-
     print("\n=== Pembelian Produk ===")
+    
+    selected_products = []
     while True:
         view_products()
         product_index = int(input("Pilih nomor produk untuk membeli (0 untuk selesai): ")) - 1
@@ -266,6 +264,17 @@ def make_purchase(username, selected_products=None):
         # Update stok produk
         product[3] = str(int(product[3]) - quantity)
 
+        # Menulis kembali stok yang diperbarui ke file products.csv
+        with open(PRODUCTS_FILE, 'w', newline='') as file:
+            writer = csv.writer(file)
+            for row in products:
+                writer.writerow(row)
+
+        print(f"\nStok produk '{product[0]}' telah diperbarui di 'products.csv'.")
+
+    total_price = sum([item['total_price'] for item in selected_products])
+    print(f"\nTotal Harga Pembelian: Rp {total_price}")
+
     # Menu untuk membatalkan produk atau mengubah jumlah produk sebelum pembayaran
     while True:
         print("\n=== Daftar Produk yang Anda Pilih ===")
@@ -281,8 +290,9 @@ def make_purchase(username, selected_products=None):
             break
         elif cancel_choice == '88':
             print("Anda memilih untuk menambah produk lagi.")
-            make_purchase(username, selected_products)  # Pass selected_products to the function
+            make_purchase(username)  # Memanggil ulang fungsi make_purchase untuk menambah produk
             break
+
         elif cancel_choice == '99':
             try:
                 edit_index = int(input("Masukkan nomor produk yang jumlahnya ingin dikurangi: ")) - 1
@@ -329,12 +339,13 @@ def make_purchase(username, selected_products=None):
             break
         else:
             print("Uang yang dibayarkan kurang. Coba lagi.")
-    
+
     # Simpan transaksi ke file CSV
     with open(TRANSACTIONS_FILE, 'a', newline='') as file:
         writer = csv.writer(file)
         for item in selected_products:
             writer.writerow([username, item['name'], item['quantity'], item['total_price'], voucher_code, final_price])
+
 
 # ========================== Fungsi Menu Pembeli dan Penjual ===================
 
