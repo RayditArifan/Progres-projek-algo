@@ -226,11 +226,13 @@ def delete_product():
 
 # ========================== Fungsi untuk Pembeli ================================
 
-selected_products = []
-def make_purchase(username):
+
+def make_purchase(username, selected_products=None):
     """Fungsi untuk pembeli melakukan pembelian produk."""
+    if selected_products is None:
+        selected_products = []  # Initialize if not provided
+
     print("\n=== Pembelian Produk ===")
-    
     while True:
         view_products()
         product_index = int(input("Pilih nomor produk untuk membeli (0 untuk selesai): ")) - 1
@@ -279,7 +281,7 @@ def make_purchase(username):
             break
         elif cancel_choice == '88':
             print("Anda memilih untuk menambah produk lagi.")
-            make_purchase(username)  # Memanggil ulang fungsi make_purchase untuk menambah produk
+            make_purchase(username, selected_products)  # Pass selected_products to the function
             break
         elif cancel_choice == '99':
             try:
