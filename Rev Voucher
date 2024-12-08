@@ -1,0 +1,100 @@
+def make_purchase(username, selected_products=None):
+    """Fungsi untuk pembeli melakukan pembelian produk."""
+    if selected_products is None:
+        selected_products = []  # Initialize if not provided
+
+    print("\n=== Pembelian Produk ===")
+    while True:
+        view_products()
+        product_index = int(input("Pilih nomor produk untuk membeli (0 untuk selesai): ")) - 1
+        
+        if product_index == -1:
+            break
+        
+        # Memastikan produk yang dipilih valid
+        with open(PRODUCTS_FILE, 'r') as file:
+            reader = csv.reader(file)
+            products = list(reader)
+
+        if product_index < 0 or product_index >= len(products) - 1:  # -1 karena header
+            print("Pilihan produk tidak valid.")
+            continue
+        
+        product = products[product_index + 1]  # Skip header
+        quantity = int(input(f"Masukkan jumlah {product[0]} yang ingin dibeli: "))
+        
+        if quantity > int(product[3]):
+            print(f"Stok tidak mencukupi. Hanya ada {product[3]} produk tersedia.")
+            continue
+        
+        selected_products.append({
+            'name': product[0],
+            'quantity': quantity,
+            'price': int(product[2]),
+            'total_price': quantity * int(product[2])
+        })
+        
+        # Update stok produk
+        product[3] = str(int(product[3]) - quantity)
+
+    # Menu untuk membatalkan produk atau mengubah jumlah produk sebelum pembayaran
+    while True:
+        print("\n=== Daftar Produk yang Anda Pilih ===")
+        for i, item in enumerate(selected_products, 1):
+            print(f"{i}. {item['name']} - Jumlah: {item['quantity']} - Harga perbiji : {item['price']} - Total Harga: Rp {item['total_price']}")
+
+        print("0. Selesai")
+        print("88. Tambah produk lagi")
+        print("99. Hapus beberapa jumlah produk")
+        cancel_choice = input("\nMasukkan pilihan: ")
+
+        if cancel_choice == '0':
+            break
+        elif cancel_choice == '88':
+            print("Anda memilih untuk menambah produk lagi.")
+            make_purchase(username, selected_products)  # Pass selected_products to the function
+            break
+        elif cancel_choice == '99':
+            try:
+                edit_index = int(input("Masukkan nomor produk yang jumlahnya ingin dikurangi: ")) - 1
+                if 0 <= edit_index < len(selected_products):
+                    remove_qty = int(input(f"Masukkan jumlah yang ingin dihapus dari {selected_products[edit_index]['name']}: "))
+                    if remove_qty > selected_products[edit_index]['quantity']:
+                        print(f"Jumlah yang ingin dihapus melebihi jumlah yang dibeli.")
+                    else:
+                        selected_products[edit_index]['quantity'] -= remove_qty
+                        selected_products[edit_index]['total_price'] -= remove_qty * selected_products[edit_index]['price']
+                        print(f"{remove_qty} dari {selected_products[edit_index]['name']} berhasil dihapus.")
+                        if selected_products[edit_index]['quantity'] == 0:
+                            removed_product = selected_products.pop(edit_index)
+                            print(f"Produk '{removed_product['name']}' telah dihapus sepenuhnya dari keranjang.")
+                else:
+                    print("Nomor produk tidak valid.")
+            except ValueError:
+                print("Masukkan angka yang valid.")
+
+    # Menyimpan perubahan stok produk
+    with open(PRODUCTS_FILE, 'w', newline='') as file:
+        writer = csv.writer(file)
+        for product in products:
+            writer.writerow(product)
+
+    # Proses pembayaran
+    total_price = sum([item['total_price'] for item in selected_products])
+    print(f"\nTotal Harga: Rp {total_price}")
+    
+    # Meminta kode voucher
+    voucher_code = input("Masukkan kode voucher (kosongkan jika tidak ada): ").strip()
+    discount = 0
+    if voucher_code in VOUCHERS:
+        discount = VOUCHERS[voucher_code]
+        print(f"Diskon {discount*100}% diterapkan.")
+    
+    final_price = total_price * (1 - discount)
+    print(f"Total setelah diskon: Rp {final_price}")
+    
+    while True:
+        payment = int(input(f"Masukkan jumlah uang yang dibayarkan (Rp {final_price}): "))
+        if payment >= final_price:
+            change = payment - final_price
+            print(f"Kembalian Anda: Rp ⬤
