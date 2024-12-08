@@ -5,6 +5,7 @@ import os
 USERS_FILE = 'users.csv'
 PRODUCTS_FILE = 'products.csv'
 TRANSACTIONS_FILE = 'transactions.csv'
+
 # Voucher data
 VOUCHERS = {
     "akumahasigma": 0.1,  # Diskon 10%
@@ -12,7 +13,6 @@ VOUCHERS = {
 }
 
 # ========================== Fungsi untuk Inisialisasi ==========================
-
 def initialize_files():
     """Inisialisasi file CSV yang dibutuhkan jika file belum ada."""
     if not os.path.exists(USERS_FILE):
@@ -39,17 +39,15 @@ def initialize_files():
             ]
             writer.writerows(products)
 
-
     if not os.path.exists(TRANSACTIONS_FILE):
         with open(TRANSACTIONS_FILE, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['username', 'product', 'quantity', 'total_price', 'voucher', 'final_price'])
 
 # ========================== Fungsi untuk Registrasi ============================
-
 def register():
     """Fungsi untuk registrasi pengguna baru."""
-    print("\n-+-+-+-+-+-+-=== Registrasi Pengguna Baru -+-+-+-+-+-+-===")
+    print("\n=== Registrasi Pengguna Baru ===")
     username = input("Masukkan username: ")
     password = input("Masukkan password: ")
     role = input("Masukkan role (penjual/pembeli): ").lower()
@@ -65,7 +63,6 @@ def register():
         print(f"Registrasi berhasil. Anda terdaftar sebagai {role}.")
 
 # ========================== Fungsi untuk Login ================================
-
 def login():
     """Fungsi untuk login pengguna."""
     print("\n=== Login ===")
@@ -82,7 +79,6 @@ def login():
     return None, None
 
 # ========================== Fungsi untuk Melihat Produk =======================
-
 def view_products():
     """Melihat daftar produk yang tersedia."""
     print("\n=== Daftar Produk ===")
@@ -106,131 +102,11 @@ def view_products():
     except Exception as e:
         print(f"Terjadi kesalahan: {e}")
 
-# ========================== Fungsi untuk Menambah Produk =======================
-
-def add_product():
-    """Fungsi untuk penjual menambah produk baru."""
-    print("\n=== Menambah Produk Baru ===")
-    print("Masukkan 0 jika tidak ingin menambah produk.")
-
-    name = input("Masukkan nama produk (atau ketik 0 untuk batal): ")
-    if name == "0":
-        print("Proses penambahan produk dibatalkan.")
-        return
-    
-    category = input("Masukkan kategori (Organik/Anorganik): ").lower()
-    if category not in ["organik", "anorganik"]:
-        print("Kategori tidak valid. Pilih 'Organik' atau 'Anorganik'.")
-        return
-    price = int(input("Masukkan harga produk (Rp): "))
-    stock = int(input("Masukkan jumlah stok produk: "))
-
-    # Menyimpan produk baru ke dalam CSV
-    with open(PRODUCTS_FILE, 'a', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow([name, category.capitalize(), price, stock])
-        print(f"Produk '{name}' berhasil ditambahkan.")
-
-# ========================== Fungsi untuk Mengedit Produk =======================
-
-def edit_product():
-    """Fungsi untuk penjual mengedit produk yang sudah ada."""
-    print("\n=== Edit Produk ===")
-    view_products()  # Menampilkan daftar produk
-    product_index = input("Pilih nomor produk yang ingin diedit (ketik 0 untuk batal): ")
-
-    if product_index == '0':
-        print("Proses edit produk dibatalkan.")
-        return
-    
-    try : 
-        product_index = int(product_index) - 1
-    except:
-        print("Input harus berupa angka.")
-        return
-    # Memastikan produk yang dipilih valid
-    with open(PRODUCTS_FILE, 'r') as file:
-        reader = csv.reader(file)
-        products = list(reader)
-
-    if product_index < 0 or product_index >= len(products) - 1:  # -1 karena header
-        print("Pilihan produk tidak valid.")
-        return
-    
-    selected_product = products[product_index + 1]  # Skip header
-    print(f"Produk yang dipilih: {selected_product[0]}")
-
-    # Mengedit nama produk
-    name = input(f"Nama produk (sekarang: {selected_product[0]}): ")
-    if name == "0":
-        print("Proses edit produk dibatalkan.")
-        return
-
-    category = input(f"Kategori produk (sekarang: {selected_product[1]}): ").lower()
-    if category not in ["organik", "anorganik"]:
-        print("Kategori tidak valid. Pilih 'Organik' atau 'Anorganik'.")
-        return
-    price = int(input(f"Harga produk (sekarang: Rp {selected_product[2]}): "))
-    stock = int(input(f"Stok produk (sekarang: {selected_product[3]}): "))
-
-    # Update data produk
-    products[product_index + 1] = [name, category.capitalize(), price, stock]
-    
-    # Menyimpan perubahan produk ke dalam CSV
-    with open(PRODUCTS_FILE, 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerows(products)
-    
-    print(f"Produk '{name}' berhasil diedit.")
-
-# ========================== Fungsi untuk Menghapus Produk ======================
-
-def delete_product():
-    """Fungsi untuk penjual menghapus produk yang sudah ada."""
-    print("\n=== Hapus Produk ===")
-    view_products()  # Menampilkan daftar produk
-    product_index = input("Pilih nomor produk yang ingin dihapus (ketik 0 untuk batal): ")
-
-    if product_index == '0':
-        print("Proses penghapusan produk dibatalkan.")
-        return
-    
-    try :
-        product_index = int(product_index) - 1
-    except :
-        print("Input harus berupa angka.")
-        return
-    # Memastikan produk yang dipilih valid
-    with open(PRODUCTS_FILE, 'r') as file:
-        reader = csv.reader(file)
-        products = list(reader)
-
-    if product_index < 0 or product_index >= len(products) - 1:  # -1 karena header
-        print("Pilihan produk tidak valid.")
-        return
-    
-    selected_product = products[product_index + 1]  # Skip header
-    print(f"Produk yang dipilih: {selected_product[0]}")
-    
-    confirm = input(f"Apakah Anda yakin ingin menghapus produk '{selected_product[0]}'? (y/n): ").lower()
-    if confirm == 'y':
-        del products[product_index + 1]
-        
-        # Menyimpan perubahan ke dalam file CSV
-        with open(PRODUCTS_FILE, 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerows(products)
-        
-        print(f"Produk '{selected_product[0]}' berhasil dihapus.")
-    else:
-        print("Penghapusan produk dibatalkan.")
-
 # ========================== Fungsi untuk Pembeli ================================
-
-selected_products = []
 def make_purchase(username):
     """Fungsi untuk pembeli melakukan pembelian produk."""
     print("\n=== Pembelian Produk ===")
+    selected_products = []  # Keranjang belanja
     
     while True:
         view_products()
@@ -258,7 +134,6 @@ def make_purchase(username):
         selected_products.append({
             'name': product[0],
             'quantity': quantity,
-            'price' : int(product[2]),
             'total_price': quantity * int(product[2])
         })
         
@@ -269,38 +144,37 @@ def make_purchase(username):
     while True:
         print("\n=== Daftar Produk yang Anda Pilih ===")
         for i, item in enumerate(selected_products, 1):
-            print(f"{i}. {item['name']} - Jumlah: {item['quantity']} - Harga perbiji : {item['price']} - Total Harga: Rp {item['total_price']}")
+            print(f"{i}. {item['name']} - Jumlah: {item['quantity']} - Total Harga: Rp {item['total_price']}")
 
-        print("0. Selesai")
-        print("88. Tambah produk lagi")
-        print("99. Hapus beberapa jumlah produk")
-        cancel_choice = input("\nMasukkan pilihan: ")
+        cancel_choice = input("\nMasukkan nomor produk yang ingin dibatalkan (0 untuk selesai): ")
 
         if cancel_choice == '0':
             break
-        elif cancel_choice == '88':
-            print("Anda memilih untuk menambah produk lagi.")
-            make_purchase(username)  # Memanggil ulang fungsi make_purchase untuk menambah produk
-            break
-        elif cancel_choice == '99':
-            try:
-                edit_index = int(input("Masukkan nomor produk yang jumlahnya ingin dikurangi: ")) - 1
-                if 0 <= edit_index < len(selected_products):
-                    remove_qty = int(input(f"Masukkan jumlah yang ingin dihapus dari {selected_products[edit_index]['name']}: "))
-                    if remove_qty > selected_products[edit_index]['quantity']:
-                        print(f"Jumlah yang ingin dihapus melebihi jumlah yang dibeli.")
-                    else:
-                        selected_products[edit_index]['quantity'] -= remove_qty
-                        selected_products[edit_index]['total_price'] -= remove_qty * selected_products[edit_index]['price']
-                        print(f"{remove_qty} dari {selected_products[edit_index]['name']} berhasil dihapus.")
-                        if selected_products[edit_index]['quantity'] == 0:
-                            removed_product = selected_products.pop(edit_index)
-                            print(f"Produk '{removed_product['name']}' telah dihapus sepenuhnya dari keranjang.")
-                else:
-                    print("Nomor produk tidak valid.")
-            except ValueError:
-                print("Masukkan angka yang valid.")
+        
+        try:
+            cancel_index = int(cancel_choice) - 1
+            if cancel_index < 0 or cancel_index >= len(selected_products):
+                print("Nomor produk tidak valid.")
+                continue
+        except ValueError:
+            print("Masukkan angka yang valid.")
+            continue
+        
+        # Menanyakan jumlah yang ingin dibatalkan
+        cancel_quantity = int(input(f"Masukkan jumlah {selected_products[cancel_index]['name']} yang ingin dibatalkan: "))
+        if cancel_quantity > selected_products[cancel_index]['quantity']:
+            print(f"Jumlah yang dibatalkan melebihi jumlah yang dibeli. Hanya ada {selected_products[cancel_index]['quantity']} barang.")
+            continue
+        
+        # Mengurangi jumlah produk
+        selected_products[cancel_index]['quantity'] -= cancel_quantity
+        selected_products[cancel_index]['total_price'] -= cancel_quantity * int(products[product_index + 1][2])
 
+        # Mengembalikan stok produk
+        products[product_index + 1][3] = str(int(products[product_index + 1][3]) + cancel_quantity)
+        
+        print(f"{cancel_quantity} {selected_products[cancel_index]['name']} berhasil dibatalkan.")
+    
     # Menyimpan perubahan stok produk
     with open(PRODUCTS_FILE, 'w', newline='') as file:
         writer = csv.writer(file)
@@ -336,7 +210,6 @@ def make_purchase(username):
             writer.writerow([username, item['name'], item['quantity'], item['total_price'], voucher_code, final_price])
 
 # ========================== Fungsi Menu Pembeli dan Penjual ===================
-
 def pembeli_menu(username):
     """Menu khusus untuk pembeli setelah login"""
     while True:
@@ -381,26 +254,16 @@ def penjual_menu(username):
             print("Pilihan tidak valid.")
 
 # ========================== Program Utama ===========================
-
 def main():
     """Program utama"""
     initialize_files()
 
     while True:
+        print("\n=== Selamat Datang di F.O.R STORE ===")
+        print("1. Login")
+        print("2. Register")
+        print("3. Keluar")
         
-        print("███████╗░░░░█████╗░░░░██████╗░    ░██████╗████████╗░█████╗░██████╗░███████╗")
-        print("██╔════╝░░░██╔══██╗░░░██╔══██╗    ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██╔════╝")
-        print("█████╗░░░░░██║░░██║░░░██████╔╝    ╚█████╗░░░░██║░░░██║░░██║██████╔╝█████╗░░")
-        print("██╔══╝░░░░░██║░░██║░░░██╔══██╗    ░╚═══██╗░░░██║░░░██║░░██║██╔══██╗██╔══╝░░")
-        print("██║░░░░░██╗╚█████╔╝██╗██║░░██║    ██████╔╝░░░██║░░░╚█████╔╝██║░░██║███████╗")
-        print("╚═╝░░░░░╚═╝░╚════╝░╚═╝╚═╝░░╚═╝    ╚═════╝░░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚══════╝")
-        print("                                                                           ")
-        print("|||||||||||||||||||||||||||||||||||||||||")
-        print("||   Selamat Datang di F.O.R STORE     ||")
-        print("||           1. Login                  ||")
-        print("||           2. Register               ||")
-        print("||           3. Keluar                 ||")
-        print("|||||||||||||||||||||||||||||||||||||||||")
         choice = input("Pilih menu (1-3): ")
         
         if choice == '1':

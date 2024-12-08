@@ -3,7 +3,7 @@ import os
 
 # File paths
 USERS_FILE = 'users.csv'
-PRODUCTS_FILE = 'products.csv'
+PRODUCTS_FILE = 'products.csv'  # Nama file sudah sesuai dengan permintaan
 TRANSACTIONS_FILE = 'transactions.csv'
 # Voucher data
 VOUCHERS = {
@@ -38,7 +38,6 @@ def initialize_files():
                 ["Pupuk Kalium Sulfat", "Anorganik", 30000, 100],
             ]
             writer.writerows(products)
-
 
     if not os.path.exists(TRANSACTIONS_FILE):
         with open(TRANSACTIONS_FILE, 'w', newline='') as file:
@@ -143,7 +142,7 @@ def edit_product():
         print("Proses edit produk dibatalkan.")
         return
     
-    try : 
+    try:
         product_index = int(product_index) - 1
     except:
         print("Input harus berupa angka.")
@@ -195,9 +194,9 @@ def delete_product():
         print("Proses penghapusan produk dibatalkan.")
         return
     
-    try :
+    try:
         product_index = int(product_index) - 1
-    except :
+    except:
         print("Input harus berupa angka.")
         return
     # Memastikan produk yang dipilih valid
@@ -258,7 +257,7 @@ def make_purchase(username):
         selected_products.append({
             'name': product[0],
             'quantity': quantity,
-            'price' : int(product[2]),
+            'price': int(product[2]),
             'total_price': quantity * int(product[2])
         })
         
@@ -387,7 +386,6 @@ def main():
     initialize_files()
 
     while True:
-        
         print("███████╗░░░░█████╗░░░░██████╗░    ░██████╗████████╗░█████╗░██████╗░███████╗")
         print("██╔════╝░░░██╔══██╗░░░██╔══██╗    ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██╔════╝")
         print("█████╗░░░░░██║░░██║░░░██████╔╝    ╚█████╗░░░░██║░░░██║░░██║██████╔╝█████╗░░")
