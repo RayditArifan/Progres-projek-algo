@@ -263,14 +263,14 @@ def make_purchase(username):
         
         # Update stok produk
         product[3] = str(int(product[3]) - quantity)
-
+    
         # Menulis kembali stok yang diperbarui ke file products.csv
         with open(PRODUCTS_FILE, 'w', newline='') as file:
             writer = csv.writer(file)
             for row in products:
                 writer.writerow(row)
 
-        print(f"\nStok produk '{product[0]}' telah diperbarui di 'products.csv'.")
+        print(f"\nStok produk '{product[0]}' telah masuk ke keranjang.")
 
     total_price = sum([item['total_price'] for item in selected_products])
     print(f"\nTotal Harga Pembelian: Rp {total_price}")
