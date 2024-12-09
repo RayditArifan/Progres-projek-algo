@@ -282,15 +282,10 @@ def make_purchase(username):
             print(f"{i}. {item['name']} - Jumlah: {item['quantity']} - Harga perbiji : {item['price']} - Total Harga: Rp {item['total_price']}")
 
         print("0. Selesai")
-        print("88. Tambah produk lagi")
         print("99. Hapus beberapa jumlah produk")
         cancel_choice = input("\nMasukkan pilihan: ")
 
         if cancel_choice == '0':
-            break
-        elif cancel_choice == '88':
-            print("Anda memilih untuk menambah produk lagi.")
-            make_purchase(username)  # Memanggil ulang fungsi make_purchase untuk menambah produk
             break
 
         elif cancel_choice == '99':
@@ -304,9 +299,17 @@ def make_purchase(username):
                         selected_products[edit_index]['quantity'] -= remove_qty
                         selected_products[edit_index]['total_price'] -= remove_qty * selected_products[edit_index]['price']
                         print(f"{remove_qty} dari {selected_products[edit_index]['name']} berhasil dihapus.")
+                        # Increase the stock in products list
+                        product_name = selected_products[edit_index]['name']
+                        for product in products[1:]:
+                            if product[0] == product_name:  # Assuming product name is in the first column
+                                product[3] = str(int(product[3]) + remove_qty)  # Increase stock
+                                break     
+
                         if selected_products[edit_index]['quantity'] == 0:
                             removed_product = selected_products.pop(edit_index)
                             print(f"Produk '{removed_product['name']}' telah dihapus sepenuhnya dari keranjang.")
+
                 else:
                     print("Nomor produk tidak valid.")
             except ValueError:
